@@ -1,6 +1,6 @@
 services:
   db:
-    image: pgvector/pgvector:pg16
+    image: pgvector/pgvector:pg15
     container_name: rag_db
     environment:
       POSTGRES_USER: rag
