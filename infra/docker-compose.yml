@@ -12,8 +12,10 @@ services:
       - rag_data:/var/lib/postgresql/data
 
   api:
-    build: ../backend
     container_name: rag_api
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ragdb
       SPRING_DATASOURCE_USERNAME: rag
