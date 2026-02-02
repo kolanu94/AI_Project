@@ -17,6 +17,9 @@ public class DocumentEntity {
   @Column(nullable = false, columnDefinition = "text")
   private String content;
 
+  @Column(length = 200)
+  private String source; // ✅ maps DB column "source"
+
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;
 
@@ -28,8 +31,10 @@ public class DocumentEntity {
   public Long getId() { return id; }
   public String getTitle() { return title; }
   public String getContent() { return content; }
+  public String getSource() { return source; }
   public OffsetDateTime getCreatedAt() { return createdAt; }
 
   public void setTitle(String title) { this.title = title; }
   public void setContent(String content) { this.content = content; }
+  public void setSource(String source) { this.source = source; }
 }
