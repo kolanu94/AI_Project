@@ -7,6 +7,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Comparator;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/documents")
@@ -55,5 +57,44 @@ public class DocumentController {
 
   private boolean isBlank(String s) {
     return s == null || s.trim().isEmpty();
+  }
+  @PostMapping("/upload")
+@ResponseStatus(HttpStatus.CREATED)
+public DocumentDetail upload(@RequestParam("file") MultipartFile file,
+                             @RequestParam(value = "title", required = false) String title,
+                             @RequestParam(value = "source", required = false) String source) throws Exception {
+
+  if (file == null || file.isEmpty()) {
+    throw new IllegalArgumentException("file is required");
+  }
+
+  String content = new String(file.getBytes(), StandardCharsets.UTF_8).trim();
+  if (content.isEmpty()) {
+    throw new IllegalArgumentException("file content is empty");
+  }
+
+  String finalTitle = (title == null || title.isBlank())
+      ? file.getOriginalFilename()
+      : title.trim();
+
+  String finalSource = (source == null || source.isBlank())
+      ? "upload"
+      : source.trim();
+
+  var e = new DocumentEntity();
+  e.setTitle(finalTitle);
+  e.setContent(content);
+  e.setSource(finalSource);
+
+  var saved = repo.save(e);
+  return new DocumentDetail(saved.getId(), saved.getTitle(), saved.getContent(), saved.getCreatedAt());
+}
+  @GetMapping("/search")
+  public List<DocumentListItem> search(@RequestParam("q") String q) {
+    if (isBlank(q)) return List.of();
+
+    return repo.search(q.trim()).stream()
+        .map(d -> new DocumentListItem(d.getId(), d.getTitle(), d.getCreatedAt()))
+        .toList();
   }
 }
