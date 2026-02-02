@@ -24,3 +24,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   flyway:
     enabled: true
+
+openai:
+  apiKey: itsmyproject
+  chatModel: ${OPENAI_CHAT_MODEL:mini}
+  embedModel: ${OPENAI_EMBED_MODEL:text-embedding-3-small}
