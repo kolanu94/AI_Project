@@ -10,7 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - rag_data:/var/lib/postgresql/data
-
+ 
   api:
     container_name: rag_api
     build:
@@ -20,13 +20,13 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ragdb
       SPRING_DATASOURCE_USERNAME: rag
       SPRING_DATASOURCE_PASSWORD: rag
-      OPENAI_API_KEY: itsmyproject}
-      OPENAI_CHAT_MODEL: mini
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_CHAT_MODEL: gpt-4o-mini
       OPENAI_EMBED_MODEL: text-embedding-3-small
     ports:
       - "8080:8080"
     depends_on:
       - db
-
+ 
 volumes:
   rag_data:
